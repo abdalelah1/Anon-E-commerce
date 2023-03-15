@@ -95,10 +95,20 @@ def SearchProduct(request):
 def Signup(request):
       newuser=User.objects.create_user()    
 def view_item(request,product_id):
+    if request.user.is_authenticated:
+            customer=request.user.customers
+            baskets,created=Basket.objects.get_or_create(basket_customer_fk=customer)
+            items=baskets.basket_details_set.all()
+            basketItem=baskets.get_cart_items
+    else :
+            items=[]
+            baskets={'get_cart_total':0,'get_cart_items':0 }
+            basketItem=baskets['get_cart_items']
+
     print('productId',product_id)
     products=Product.objects.get(id=product_id)
     print("products:",products)
     print("products1:",products)
     context=[]
-    context={'products':products}
+    context={'products':products,'basketItem':basketItem}
     return render(request,'store/details.html',context)

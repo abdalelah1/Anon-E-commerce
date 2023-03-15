@@ -1,11 +1,24 @@
 var updateBtns=document.getElementsByClassName('update-card')
 var viewProduct=document.getElementsByClassName('view-product');
 
-for(var i =0;i<updateBtns.length;i++)
+
+for(var i =0;i<viewProduct.length;i++)
 {
+  viewProduct[i].addEventListener('click',function()
+    {
+      
+      var  productId=this.dataset.product 
+      var  action   =this.dataset.action
+      console.log('prodcutid : ',productId,'action :',action)
+      console.log('User',user)
+      view_product(productId,action)
+    })
+} 
+for(var i =0;i<updateBtns.length;i++)
+
     updateBtns[i].addEventListener('click',function()
     {
-    console.log('hiih')
+      console.log('hiih')
       var  productId=this.dataset.product
       var  action   =this.dataset.action    
       console.log('prodcutid : ',productId,'action :',action)
@@ -20,7 +33,7 @@ for(var i =0;i<updateBtns.length;i++)
 
       }
     })
-} 
+
 
 function UpdateUserOrder(prodcutid,action)
 {
@@ -48,22 +61,11 @@ function UpdateUserOrder(prodcutid,action)
    window.location.reload()
   })
 }
-for(var i =0;i<viewProduct.length;i++)
-{
-  viewProduct[i].addEventListener('click',function()
-    {
-
-      var  productId=this.dataset.product
-      var  action   =this.dataset.action    
-      console.log('prodcutid : ',productId,'action :',action)
-      console.log('User',user)
-      view_product(productId,action)
-    })
-} 
 function view_product(prodcutid,action)
 {
-  console.log()
+  console.log(prodcutid)
   var url ='/view_item/'
+  
   fetch(url,{
     method:'POST',
     
@@ -78,7 +80,7 @@ function view_product(prodcutid,action)
   })
   .then((response)=>{
     
-    window.location.href = '/details/' + prodcutid.id + '/';
+    window.location.href = '/details/' + prodcutid+ '/';
     
   })
   .then((data)=>{
