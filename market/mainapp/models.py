@@ -9,6 +9,7 @@ class Customers(models.Model):
         customer_Birth_date = models.CharField(max_length=30)
         customer_Mobile_number=models.CharField(max_length=15)
         customer_gender=models.CharField(max_length=4)
+        customer_email=models.CharField(max_length=255)
         custome_fk=models.OneToOneField(User,on_delete=models.CASCADE,null=False)
         def __str__(self) :
                 return str(self.id)
@@ -18,11 +19,13 @@ class Category(models.Model):
         def __str__(self) :
                 return str(self.id)
 class Product(models.Model):
-        Product_name=models.CharField(max_length=100)
-        Product_description=models.CharField(max_length=500)
-        Product_counter=models.IntegerField(default=0)
+        Product_name=models.CharField(max_length=1000)
+        Product_description=models.CharField(max_length=10000)
+        Product_counter=models.IntegerField(default=0,null=True)
         Product_price=models.FloatField()
+        Product_brand=models.CharField(max_length=500)
         Product_image=models.ImageField(null=True)
+        Product_asin=models.CharField(max_length=500)
         product_category_fk=models.ForeignKey(Category,on_delete=models.CASCADE,null=False)
         def __str__(self) :
                 return str(self.id)

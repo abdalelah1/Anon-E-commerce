@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'market.wsgi.application'
 DATABASES = {   
     'default': {   
         'ENGINE': 'django.db.backends.mysql',   
-        'NAME': 'proudctsdb',   
+        'NAME': 'testdb',   
         'USER': 'abdalelah',   
         'PASSWORD': 'Aa12345612',   
         'HOST': '127.0.0.1',   

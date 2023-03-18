@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from .recommensation_system import show_recommendations1,show_recommendations
 # Create your views here.
 def loginpage(request):
      if request.method=='POST':
@@ -104,11 +105,12 @@ def view_item(request,product_id):
             items=[]
             baskets={'get_cart_total':0,'get_cart_items':0 }
             basketItem=baskets['get_cart_items']
-
-    print('productId',product_id)
     products=Product.objects.get(id=product_id)
-    print("products:",products)
-    print("products1:",products)
+#     cluster_id,cluster_products=show_recommendations1(products.Product_description)
+#     print("cluser",cluster_id,"cluster_products",cluster_products)
+    recommedationProducts=show_recommendations(products.Product_description)
+    recommedationProducts = Product.objects.filter(Product_asin__in=recommedationProducts[1])
+    print('matching_products',products)
     context=[]
-    context={'products':products,'basketItem':basketItem}
+    context={'products':products,'basketItem':basketItem,'recommedationProducts':recommedationProducts}
     return render(request,'store/details.html',context)

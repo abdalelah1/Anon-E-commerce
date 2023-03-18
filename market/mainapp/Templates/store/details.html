@@ -138,9 +138,48 @@
     font-weight: 600;
     color: #0099ff;
   }
+  .recommendation-name {
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
         
     </style>
+    <script>
+      const container = document.querySelector('.recommendation-container');
+const cards = document.querySelector('.recommendation-cards');
+const card = document.querySelector('.recommendation-card');
+
+let isDragging = false;
+let startX;
+let scrollLeft;
+
+cards.addEventListener('mousedown', e => {
+  isDragging = true;
+  startX = e.pageX - cards.offsetLeft;
+  scrollLeft = cards.scrollLeft;
+});
+
+cards.addEventListener('mouseleave', () => {
+  isDragging = false;
+});
+
+cards.addEventListener('mouseup', () => {
+  isDragging = false;
+});
+
+cards.addEventListener('mousemove', e => {
+  if(!isDragging) return;
+  e.preventDefault();
+  const x = e.pageX - cards.offsetLeft;
+  const walk = (x - startX) * 3; //controls the scroll speed
+  cards.scrollLeft = scrollLeft - walk;
+});
+
+    </script>
     
       
 </head>
@@ -149,7 +188,7 @@
     <div class="container">
         <div class="product-details">
           <div class="product-image">
-            <img src="{{products.Product_image.url}}" alt="Product Image">
+            <img src="{{products.Product_image}}"alt="Product Image">
           </div>
           <div class="product-info">
             <h1 class="product-name">{{products.Product_name}}</h1>
@@ -162,40 +201,23 @@
               <span class="fa fa-star"></span>
               <span class="rating-count">(3.5)</span>
             </div>
-            <h2 class="product-price">{{products.Product_price}}</h2>
+            <h2 class="product-price">${{products.Product_price}}</h2>
           </div>
         </div>
       
         <div class="recommendations">
           <h3 class="recommendations-title">You may also like</h3>
           <div class="recommendation-cards">
+            {% for product in recommedationProducts%}
             <div class="recommendation-card">
-              <img src="https://via.placeholder.com/150x150" alt="Recommendation Image">
-              <h4 class="recommendation-name">Recommendation Name</h4>
-              <p class="recommendation-price">$14.99</p>
+              <img src="{{product.Product_image}}"alt="Recommendation Image">
+              <h4 class="recommendation-name">{{product.Product_name}}</h4>
+              <p class="recommendation-price">${{product.Product_price}}</p>
             </div>
-            <div class="recommendation-card">
-              <img src="https://via.placeholder.com/150x150" alt="Recommendation Image">
-              <h4 class="recommendation-name">Recommendation Name</h4>
-              <p class="recommendation-price">$12.99</p>
-            </div>
-            <div class="recommendation-card">
-              <img src="https://via.placeholder.com/150x150" alt="Recommendation Image">
-              <h4 class="recommendation-name">Recommendation Name</h4>
-              <p class="recommendation-price">$11.99</p>
-            </div>
-            <div class="recommendation-card">
-              <img src="https://via.placeholder.com/150x150" alt="Recommendation Image">
-              <h4 class="recommendation-name">Recommendation Name</h4>
-              <p class="recommendation-price">$9.99</p>
-            </div>
-            <div class="recommendation-card">
-              <img src="https://via.placeholder.com/150x150" alt="Recommendation Image">
-              <h4 class="recommendation-name">Recommendation Name</h4>
-              <p class="recommendation-price">$7.99</p>
-            </div>
+            {% endfor %}
           </div>
         </div>
+  
       </div>
 </body>
 </html> 
