@@ -22,7 +22,18 @@ def loginpage(request):
 def RegisterUser(request):
       context=[]
       return render(request,'store/login.html',context)
-
+def checkout(request):
+      if request.user.is_authenticated:
+                customer=request.user.customers
+                baskets,created=Basket.objects.get_or_create(basket_customer_fk=customer)
+                items=baskets.basket_details_set.all()
+                basketItem=baskets.get_cart_items
+      else :
+                items=[]
+                baskets={'get_cart_total':0,'get_cart_items':0 }
+                basketItem=baskets['get_cart_items']
+      context={'items':items,'basket':baskets,'basketItem':basketItem }
+      return render(request,'store/checkout.html',context)
 def store(request):
      if request.user.is_authenticated:
             customer=request.user.customers
@@ -114,3 +125,53 @@ def view_item(request,product_id):
     context=[]
     context={'products':products,'basketItem':basketItem,'recommedationProducts':recommedationProducts}
     return render(request,'store/details.html',context)
+
+def home (request):
+      return render(request,'store/index.html')
+def main_page (request):
+      if request.user.is_authenticated:
+            customer=request.user.customers
+            baskets,created=Basket.objects.get_or_create(basket_customer_fk=customer)
+            items=baskets.basket_details_set.all()
+            basketItem=baskets.get_cart_items
+      else :
+            items=[]
+            baskets={'get_cart_total':0,'get_cart_items':0 }
+            basketItem=baskets['get_cart_items']
+      Categories=Category.objects.all()
+      Offer=Offers()
+      context=[]
+      latest_product =new_product()
+      context={"latest_product":latest_product,"Offers":Offer,"Categories":Categories,'basketItem':basketItem}
+      return render(request,'store/home.html',context)
+def new_product() :
+      latest_product=Product.objects.order_by('-product_date_added')[:12]
+      
+      return latest_product
+def Offers():
+      allOffers=Offer.objects.all()
+      for i in allOffers : 
+            print("ii",i)
+      return allOffers  
+def mainPorduct(request):
+     if request.user.is_authenticated:
+                customer=request.user.customers
+                baskets,created=Basket.objects.get_or_create(basket_customer_fk=customer)
+                items=baskets.basket_details_set.all()
+                basketItem=baskets.get_cart_items
+     else :
+                items=[]
+                baskets={'get_cart_total':0,'get_cart_items':0 }
+                basketItem=baskets['get_cart_items']
+
+     query=request.POST['search']
+     products=Product.objects.all()
+     product=products.filter(Product_name__contains=query)
+     context=[]
+     context={'products':product,'basketItem':basketItem}
+     return render(request,'store/mainProduct.html',context)
+def show_category_products(request, category_id):
+       products=Product.objects.filter(product_category_fk=category_id)
+       context=[]
+       context={"products":products}
+       return render(request,'store/mainProduct.html',context)

@@ -6,15 +6,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from .models import Product
 product_file=Product.objects.values_list('Product_description','Product_asin','id')
+
 product=pd.DataFrame(product_file,columns=['Product_description','Product_asin','Product_id'])
 product_description = product['Product_description']
 def train():
+    print("re train")
     vectorizer = TfidfVectorizer(stop_words='english')
     X1 = vectorizer.fit_transform(product_description)
     X=X1
     kmeans = KMeans(n_clusters = 10, init = 'k-means++')
     y_kmeans = kmeans.fit_predict(X)
-    true_k = 3
+    true_k =30
     model = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1)
     model.fit(X1)
     print("Top terms per cluster:")
@@ -27,12 +29,6 @@ def print_cluster(i):
     for ind in order_centroids[i, :10]:
         print(' %s' % terms[ind]),
     print
-# def show_recommendations(product):
-#     #print("Cluster ID:")
-#     Y = vectorizer.transform([product])
-#     prediction = model.predict(Y)
-#     #print(prediction)
-#     print_cluster(prediction[0])
 
 def show_recommendations1(product_description):
         vectorizer,model,order_centroids,terms =train()

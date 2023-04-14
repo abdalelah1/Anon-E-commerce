@@ -10,8 +10,9 @@ for(var i =0;i<viewProduct.length;i++)
       var  productId=this.dataset.product 
       var  action   =this.dataset.action
       console.log('prodcutid : ',productId,'action :',action)
-      console.log('User',user)
-      view_product(productId,action)
+      console.log('from update')
+      console.log('user',user)
+       view_product(productId,action)
     })
 } 
 for(var i =0;i<updateBtns.length;i++)
@@ -63,7 +64,7 @@ function UpdateUserOrder(prodcutid,action)
 }
 function view_product(prodcutid,action)
 {
-  console.log(prodcutid)
+  console.log("from view",prodcutid)
   var url ='/view_item/'
   
   fetch(url,{

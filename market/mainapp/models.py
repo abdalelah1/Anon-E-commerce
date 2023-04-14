@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date,datetime
 
 # Create your models here.
 
@@ -16,6 +17,7 @@ class Customers(models.Model):
 class Category(models.Model):
         Category_name=models.CharField(max_length=100)
         Category_totoal_count=models.IntegerField(default=0)
+        Category_icon=models.ImageField(null=True)
         def __str__(self) :
                 return str(self.id)
 class Product(models.Model):
@@ -27,6 +29,7 @@ class Product(models.Model):
         Product_image=models.ImageField(null=True)
         Product_asin=models.CharField(max_length=500)
         product_category_fk=models.ForeignKey(Category,on_delete=models.CASCADE,null=False)
+        product_date_added = models.DateField(default=date.today)
         def __str__(self) :
                 return str(self.id)
 class Product_Rating(models.Model):
@@ -66,11 +69,6 @@ class Basket_Details(models.Model):
             total =self.basket_details_product_fk.Product_price*self.basket_details_product_count
             return total
         
-
-        
-        
-     
-        
 class Bill(models.Model):
         bill_customer_fk=models.ForeignKey(Customers,on_delete=models.CASCADE,null=False)
         bill_total_price=models.FloatField()
@@ -86,8 +84,26 @@ class Bill_details(models.Model):
         def __str__(self) :
                 return self.id 
 
+class Offer(models.Model):
+    offer_name = models.CharField(max_length=100)
+    offer_description = models.CharField(max_length=1000)
+    offer_discount = models.FloatField()
+    offer_before_discount=models.FloatField()
+    offer_after_discount = models.FloatField()
+    offer_start_date = models.DateField()
+    offer_end_date = models.DateField()
+    offer_product_fk = models.ForeignKey(Product, on_delete=models.CASCADE)
+    @property 
+    def enddate(self):
+          end_datetime = datetime.combine(self.offer_end_date, datetime.min.time())
+          time_diff = end_datetime - datetime.now()
+          days=time_diff.days
+          hours = time_diff.seconds // 3600 # get number of hours
+          minutes = (time_diff.seconds // 60) % 60 
+          seconds=time_diff.seconds
+          return {"days":days,"hours":hours,"minutes":minutes,"seconds":seconds}
 
-
-
+    def __str__(self):
+        return self.offer_name
         
 
