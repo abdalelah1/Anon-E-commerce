@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date,datetime
-
 # Create your models here.
 
 
@@ -11,9 +10,19 @@ class Customers(models.Model):
         customer_Mobile_number=models.CharField(max_length=15)
         customer_gender=models.CharField(max_length=4)
         customer_email=models.CharField(max_length=255)
+        is_admin = models.BooleanField(default=False)
         custome_fk=models.OneToOneField(User,on_delete=models.CASCADE,null=False)
         def __str__(self) :
                 return str(self.id)
+class ShippingInfo(models.Model):
+    customer = models.ForeignKey(Customers, on_delete=models.CASCADE, null=False)
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    country = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.id)
 class Category(models.Model):
         Category_name=models.CharField(max_length=100)
         Category_totoal_count=models.IntegerField(default=0)
@@ -36,7 +45,6 @@ class Product_Rating(models.Model):
         rating_stars=models.IntegerField()
         rating_description=models.CharField(max_length=100)
         product_rating_product_fk=models.ForeignKey(Product,on_delete=models.CASCADE,null=False)
-        product_rating_customer_fk=models.ForeignKey(Customers,on_delete=models.CASCADE,null=False)
         def __str__(self) :
                 return str(self.id)
 
@@ -56,6 +64,15 @@ class Basket(models.Model):
             basketitems=self.basket_details_set.all()
             total=sum([item.basket_details_product_count for item in basketitems])   
             return total
+        def confirm_order(self):
+                order = Orders.objects.create(customer=self.basket_customer_fk, total_price=self.basket_total_price)
+                basket_items = self.basket_details_set.all()
+                for item in basket_items:
+                        Order_Details.objects.create(product=item.basket_details_product_fk,
+                                                        price=item.basket_details_product_fk.Product_price,
+                                                        count=item.basket_details_product_count,
+                                                        order=order)
+                basket_items.delete()
 
 class Basket_Details(models.Model):
         basket_details_product_fk=models.ForeignKey(Product,on_delete=models.CASCADE,null=False)
@@ -76,7 +93,7 @@ class Bill(models.Model):
                 return self.id 
 
 class Bill_details(models.Model):
-        bill_datails_vat=models.FloatField()
+        bill_datails_vat=models.FloatField(default=1.0)
         bill_datails_final_price=models.FloatField()
         bill_details_counter=models.IntegerField()
         bill_details_date=models.CharField(max_length=255)
@@ -106,4 +123,16 @@ class Offer(models.Model):
     def __str__(self):
         return self.offer_name
         
+class Orders(models.Model):
+    data_added = models.DateTimeField(auto_now_add=True)
+    customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
+    total_price = models.FloatField()
+    def total_count(self):
+        return sum([item.count for item in self.order_details_set.all()])
 
+class Order_Details(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price = models.FloatField()
+    count = models.IntegerField()
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE)
+ 

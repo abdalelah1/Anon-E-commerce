@@ -1,0 +1,51 @@
+{% extends 'store/index.html' %}
+{% load static%}
+{% block product %}
+<div class="main-container container">
+    <!-- <ul class="breadcrumb">
+        <li><a href="#"><i class="fa fa-home"></i></a></li>
+        <li><a href="#">Order History</a></li>
+    </ul> -->
+
+    <div class="row">
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-9">
+            <h2 class="title">Order History</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td class="text-left">Date Added</td>
+                            <td class="text-center">Order ID</td>
+                            <td class="text-center">Qty</td>
+                            <td class="text-right">Total</td>
+                            <td>Review</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for order in orders %}
+                        <tr>
+                            <td class="text-center">{{order.data_added|date:"d/m/y" }}</td>
+                            <td class="text-center">{{order.id}}</td>
+                            <td class="text-center">{{order.total_count}}</td>
+                            <td class="text-right">${{order.total_price}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-info" title="" data-toggle="tooltip" data-order={{order.id}} 
+                                    href="{% url 'order_details' order.id %}"data-original-title="View">
+                                    <img width="20px" height="20px" src="{% static 'images/icons/eye.png'  %}" alt="" ></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <!--Middle Part End-->
+        <!--Right Part Start -->
+     
+        <!--Right Part End -->
+    </div>
+</div>
+{% endblock product %}

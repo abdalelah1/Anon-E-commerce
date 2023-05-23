@@ -1,0 +1,45 @@
+{% extends 'store/index.html' %}
+{% load static%}
+{% block product %}
+
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-sm-12">
+        <div class="card bg-light">
+          <div class="card-body">
+            <h2 class="card-title"><i class="fa fa-file-o" aria-hidden="true"></i> New Customer</h2>
+            <p class="card-text">By creating an account you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made.</p>
+            <div class="text-center">
+              <a href="{%url 'register_customer'%}" class="btn btn-primary">Continue</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="card bg-light">
+          <div class="card-body">
+            <h2 class="card-title"><i class="fa fa-file-text-o" aria-hidden="true"></i> Returning Customer</h2>
+            <p class="card-text"><strong>I am a returning customer</strong></p>
+            <form action="{%url 'login'%}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                <label class="control-label" for="user-name">User Name</label>
+                <input type="text" name="user-name" value="" id="user-name" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="input-password">Password</label>
+                <input type="password" name="password" value="" id="input-password" class="form-control" />
+              </div>
+              <div class="text-center">
+                <input type="submit" value="Login" class="btn btn-primary" />
+                <a href="#" class="forgot">Forgotten Password</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+{% endblock product %}

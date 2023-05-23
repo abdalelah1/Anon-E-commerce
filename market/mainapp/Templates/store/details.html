@@ -202,18 +202,21 @@ cards.addEventListener('mousemove', e => {
               <span class="rating-count">(3.5)</span>
             </div>
             <h2 class="product-price">${{products.Product_price}}</h2>
+            <button class="add-cart-btn update-card" data-product={{products.idin}} data-action="add">add to cart</button>
+
           </div>
         </div>
       
         <div class="recommendations">
           <h3 class="recommendations-title">You may also like</h3>
-          <div class="recommendation-cards">
+          <div class="recommendation-cards" >
             {% for product in recommedationProducts%}
-            <div class="recommendation-card">
+            <div class="recommendation-card view-product" data-product={{product.id}} data-action="view">
               <img src="{{product.Product_image}}"alt="Recommendation Image">
               <h4 class="recommendation-name">{{product.Product_name}}</h4>
               <p class="recommendation-price">${{product.Product_price}}</p>
             </div>
+            
             {% endfor %}
           </div>
         </div>

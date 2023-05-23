@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mainapp'
+    'mainapp',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'market.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,6 +88,7 @@ DATABASES = {
         
     }   
 } 
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -134,3 +136,4 @@ STATICFILES_DIRS = [
 MEDIA_URL='/images/'
 
 MEDIA_ROOT=os.path.join(BASE_DIR,'static/images')
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -15,12 +15,89 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+  
   <!--
     - custom css link
   -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/Final-css.css' %}">
-  <style>
+<style>
+
+  .chat-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+    background-image: url("{% static 'images/bot.png' %}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    cursor: pointer;}
+  
+
+    
+    .chat-window {
+      display: none; /* Initially hide the chat window */
+      width: 300px;
+      height: 500px;
+      border: 1px solid black;
+      padding: 10px;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9998;
+      background-color: white;
+    }
+
+    .chat-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  min-width: 200px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+  
+}
+
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.orders-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.current-order,
+.order-history {
+  padding: 10px;
+}
+
+.divider {
+  border-left: 1px solid black;
+  height: 50px;
+  margin: 0 10px;
+}
     .product-grid .product-img {
     width: 100%;
     max-height: 200px;
@@ -136,7 +213,7 @@
 
       <div class="container">
         <!-- left image Anon-->
-        <a href="{%url 'main_page'%}" class="header-logo">
+        <a href="{%url 'main_page' %}" class="header-logo">
           <img  src= "{% static 'images/logo/logo.svg' %}" 
             alt="Anon's logo" width="120" height="36">
         </a>
@@ -153,13 +230,57 @@
 
         <div class="header-user-actions">
           
-          <button class="action-btn">
+          {% if user.is_authenticated %}
+          <div class="dropdown">
+            <a class="btn btn-light " type="button"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{user.username}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-content">
+                <div class="orders-section">
+                  <div class="current-order">
+                    <h5>Current Order</h5>
+                    {% for order in CurrentOrders%}
+                    <p> ID:#{{order.id}}</p>
+                    {% endfor %}
+                    <a href="{%url 'orderHistory'%}">show All</a>
+                  </div>
+                  
+                  <div class="divider"></div>
+                  <!-- <div class="order-history">
+                    <h5>Order History</h5>
+                    <p>Order 1</p>
+                    <p>Order 2</p>
+                    
+                  </div> -->
+                  
+                </div>
+                <div class="dropdown-footer">
+                  <a class="btn btn-secondary btn-block" href="{%url 'logout'%}">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <a class="action-btn" type="submit" href="{%url 'login'%}">
             <ion-icon name="person-outline"></ion-icon>
-          </button>
+          </a>
+          {% endif %}
           <a class="action-btn" type="submit" href="{% url 'basket' %}">
             <ion-icon name="bag-handle-outline"></ion-icon>
             <span class="count">{{basketItem}}</span>  
+            
+           
           </a>
+</div>
+
+              <!-- {% if user.is_authenticated %}
+              <h6>{{ user.username }}</h6>
+              {% else %}
+              <ion-icon name="person-outline"></ion-icon>
+              {% endif %} -->
+  
+         
 
 
         </div>
@@ -175,7 +296,7 @@
         <ul class="desktop-menu-category-list">
 
           <li class="menu-category">
-            <a href="#" class="menu-title">Home</a>
+            <a href="{%url 'main_page'%}" class="menu-title">Home</a>
           </li>
 
           <!-- <li class="menu-category">
@@ -522,7 +643,47 @@
 
 
 
-  
+ <div class="chat-circle"></div>
+<div class="chat-window">
+  <iframe class="chat-iframe" src="https://console.dialogflow.com/api-client/demo/embedded/1d2453ea-0ec8-4a0d-8ff7-f57fe1cc66d2"></iframe>
+</div>
+
+  <footer>
+
+
+    <div class="footer-bottom">
+
+      <div class="container">
+
+        <img src="{% static 'images/payment.png' %}" alt="payment method" class="payment-img">
+
+        <p class="copyright">
+          Copyright &copy; <a href="#">Anon</a> all rights reserved.
+        </p>
+
+      </div>
+
+    </div>
+
+  </footer>
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var chatIframe = document.querySelector('.chat-iframe');
+
+      window.toggleChat = function() {
+        chatIframe.classList.toggle('chat-open');
+      };
+      console.log('middle')
+      // Listen for a message from the iframe to close the chat if needed
+      window.addEventListener('message', function(event) {
+        if (event.data === 'closeChat') {
+          chatIframe.classList.remove('chat-open');
+        }
+      });
+    });
+  </script>
+
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
@@ -538,6 +699,22 @@
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
   <script src="{% static 'js/main.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var chatCircle = document.querySelector(".chat-circle");
+      var chatWindow = document.querySelector(".chat-window");
+
+      chatCircle.addEventListener("click", function() {
+        if (chatWindow.style.display === "none") {
+          chatWindow.style.display = "block";
+        } else {
+          chatWindow.style.display = "none";
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

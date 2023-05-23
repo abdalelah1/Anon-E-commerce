@@ -1,0 +1,96 @@
+{% extends 'store/index.html' %}
+{% load static%}
+{% block product %}
+
+    <div class="row">
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-9">
+            <h2 class="title">Order Information</h2>
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <td colspan="2" class="text-left">Order Details</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="width: 50%;" class="text-left"> <b>Order ID:</b> #{{order.id}}
+                            <br>
+                            <b>Date Added:</b> {{order.data_added}}</td>
+                        <td style="width: 50%;" class="text-left"> <b>Payment Method:</b> Cash On Delivery
+                            <br>
+                            <b>Shipping Method:</b> Flat Shipping Rate </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <td style="width: 50%; vertical-align: top;" class="text-left">Shipping Address</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        
+                        <td class="text-left">{{order.customer.customer_name}}
+                            <br>{{order.customer.country}}
+                            <br>22 Hoi Wing Road
+                            <br>New Delhi
+                            <br>India</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td class="text-left">Product Name</td>
+                            <td class="text-left">Brand</td>
+                            <td class="text-right">Quantity</td>
+                            <td class="text-right">Price</td>
+                            <td class="text-right">Total</td>
+                            <td style="width: 20px;"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in details%}
+                        <tr>
+                           
+                            <td class="text-left">{{i.product.Product_name}} </td>
+                            <td class="text-left">{{i.product.Product_brand}}</td>
+                            <td class="text-right">{{i.count}}</td>
+                            <td class="text-right"> ${{i.price}}</td>
+                            <td class="text-right"></td>
+                            <!-- <td style="white-space: nowrap;" class="text-right"> <a class="btn btn-primary"
+                                    title="" data-toggle="tooltip" href="#" data-original-title="Reorder"><i
+                                        class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-danger" title="" data-toggle="tooltip" href="return.html"
+                                    data-original-title="Return"><i class="fa fa-reply"></i></a>
+                            </td> -->
+                            
+                        </tr>
+                        {%endfor%}
+
+                    </tbody>
+                    <tfoot>
+                            
+                        <tr>
+                            <td colspan="3"></td>
+                            <td class="text-right"><b>Total</b>
+                            </td>
+                            <td class="text-right">${{order.total_price}}</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+        <!--Middle Part End-->
+        <!--Right Part Start -->
+
+        <!--Right Part End -->
+    </div>
+</div>
+{% endblock product %}
