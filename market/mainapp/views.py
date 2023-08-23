@@ -95,7 +95,7 @@ def store(request):
      
      context={'products':products,'basketItem':basketItem}
      return render(request,'store/stroe.html',context)
-@login_required(login_url='login_Signup')
+@login_required(login_url='login')
 def basket(request):
         if request.user.is_authenticated:
                 customer=request.user.customers

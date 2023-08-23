@@ -22,41 +22,42 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/Final-css.css' %}">
 <style>
 
+.chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+  }
+
   .chat-circle {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 120px;
-    height: 120px;
-    background-image: url("{% static 'images/bot.png' %}");
-    background-size: cover;
+    width: 80px;
+    height: 80px;
+    background-image: url("{% static 'images/bot.png' %}");    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 50%;
-    cursor: pointer;}
-  
+    cursor: pointer;
+    position: relative;
+    z-index: 10001;
+  }
 
-    
-    .chat-window {
-      display: none; /* Initially hide the chat window */
-      width: 300px;
-      height: 500px;
-      border: 1px solid black;
-      padding: 10px;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9998;
-      background-color: white;
-    }
+  .chat-window {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+    height: 500px;
+    z-index: 10000;
+  }
 
-    .chat-iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-
+  .chat-iframe {
+    height: 100%;
+    width: 100%;
+  }
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -65,6 +66,7 @@
   z-index: 1000;
   min-width: 200px;
   padding: 10px;
+  height: 200px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -642,11 +644,14 @@
 
 
 
-
- <div class="chat-circle"></div>
-<div class="chat-window">
-  <iframe class="chat-iframe" src="https://console.dialogflow.com/api-client/demo/embedded/1d2453ea-0ec8-4a0d-8ff7-f57fe1cc66d2"></iframe>
-</div>
+<!-- 
+  <div class="chat-container">
+    <div class="chat-window">
+      <iframe class="chat-iframe"  src="https://console.dialogflow.com/api-client/demo/embedded/a4256988-017a-4a1e-a54f-02464a8c9dc5"></iframe>
+    </div>
+    <div class="chat-circle"></div>
+  </div> -->
+  
 
   <footer>
 
@@ -701,7 +706,7 @@
   <script src="{% static 'js/main.js' %}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <script>
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function() {
       var chatCircle = document.querySelector(".chat-circle");
       var chatWindow = document.querySelector(".chat-window");
@@ -713,8 +718,16 @@
           chatWindow.style.display = "none";
         }
       });
-    });
-  </script>
+    }); 
+
+  </script> -->
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+  intent="WELCOME"
+  chat-title="Online-store"
+  agent-id="a4256988-017a-4a1e-a54f-02464a8c9dc5"
+  language-code="en"
+></df-messenger>
 </body>
 
 </html>
