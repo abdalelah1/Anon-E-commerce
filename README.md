@@ -1,6 +1,6 @@
 
 
-# Anon
+# Anon E-commerce with Recommendation System and ChatBot
 
 ## Overview
 Anon is an e-commerce platform integrated with a recommendation system powered by machine learning and Dialogflow chatbot . The project utilizes Django for the backend, with a responsive frontend built using HTML, CSS, Bootstrap, and JavaScript. Additionally, the default Django admin interface is utilized for administrative tasks.
